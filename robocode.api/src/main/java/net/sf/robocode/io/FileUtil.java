@@ -35,7 +35,7 @@ public class FileUtil {  // ✅ Compliant
 		try {
 			final String wd = System.getProperty("WORKINGDIRECTORY", "");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logError(e);
 		}
 	}
 
