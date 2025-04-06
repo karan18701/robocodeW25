@@ -101,5 +101,6 @@ public class JarExtractor {
 			FileUtil.cleanupStream(bos);
 			FileUtil.cleanupStream(fos);
 		}
+
 	}
 }
