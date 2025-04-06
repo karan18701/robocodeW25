@@ -65,12 +65,26 @@ public class JarExtractor {
 	}
 
 	public static void extractFile(File dest, JarInputStream jarIS, JarEntry entry) throws IOException {
-		File out = new File(dest, entry.getName());
+		String entryName = entry.getName();
+
+		entryName = entryName.replaceAll("[\\.\\.\\/]+", "");
+
+		File out = new File(dest, entryName);
+
+		File canonicalDest = dest.getCanonicalFile();
+		File canonicalOut = out.getCanonicalFile();
+
+		if (!canonicalOut.getPath().startsWith(canonicalDest.getPath())) {
+			Logger.logError("Blocked path traversal attempt: " + entry.getName());
+			return;
+		}
+
 		File parentDirectory = new File(out.getParent());
 
 		if (!parentDirectory.exists() && !parentDirectory.mkdirs()) {
 			Logger.logError("Cannot create dir: " + parentDirectory);
 		}
+
 		FileOutputStream fos = null;
 		BufferedOutputStream bos = null;
 		byte[] buf = new byte[2048];
@@ -80,7 +94,6 @@ public class JarExtractor {
 			bos = new BufferedOutputStream(fos);
 
 			int num;
-
 			while ((num = jarIS.read(buf, 0, 2048)) != -1) {
 				bos.write(buf, 0, num);
 			}
