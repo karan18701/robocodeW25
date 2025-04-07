@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * @author Mathew A. Nelson (original)
  * @author Flemming N. Larsen (contributor)
  */
-public class FileUtil {  // ✅ Compliant
+ public class FileUtil {  // ✅ Compliant
 	private FileUtil() {
 		throw new IllegalStateException("Utility class - instantiation is not allowed");
 	}
@@ -35,7 +35,7 @@ public class FileUtil {  // ✅ Compliant
 		try {
 			final String wd = System.getProperty("WORKINGDIRECTORY", "");
 		} catch (Exception e) {
-			logError(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -338,14 +338,14 @@ public class FileUtil {  // ✅ Compliant
 			try {
 				((Flushable) stream).flush();
 			} catch (IOException e) {
-				e.printStackTrace();
+				logError(e);
 			}
 		}
 		if (stream instanceof Closeable) {
 			try {
 				((Closeable) stream).close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				logError(e);
 			}
 		}
 	}
