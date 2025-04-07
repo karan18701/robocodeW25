@@ -338,14 +338,14 @@ public class FileUtil {  // ✅ Compliant
 			try {
 				((Flushable) stream).flush();
 			} catch (IOException e) {
-				logError(e);
+				e.printStackTrace();
 			}
 		}
 		if (stream instanceof Closeable) {
 			try {
 				((Closeable) stream).close();
 			} catch (IOException e) {
-				logError(e);
+				e.printStackTrace();
 			}
 		}
 	}
