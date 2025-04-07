@@ -65,31 +65,22 @@ public class JarExtractor {
 	}
 
 	public static void extractFile(File dest, JarInputStream jarIS, JarEntry entry) throws IOException {
-		File canonicalDestDir = destDir.getCanonicalFile();
+		File out = new File(dest, entry.getName());
+		File parentDirectory = new File(out.getParent());
 
-		File outFile = new File(destDir, entry.getName());
-		File canonicalOutFile = outFile.getCanonicalFile();
-
-		if (!canonicalOutFile.getPath().startsWith(canonicalDestDir.getPath() + File.separator)) {
-			Logger.logError("Entry is outside the target dir: " + entry.getName());
-			return;
-		}
-
-		File parentDirectory = new File(canonicalOutFile.getParent());
 		if (!parentDirectory.exists() && !parentDirectory.mkdirs()) {
 			Logger.logError("Cannot create dir: " + parentDirectory);
-			return;
 		}
-
 		FileOutputStream fos = null;
 		BufferedOutputStream bos = null;
 		byte[] buf = new byte[2048];
 
 		try {
-			fos = new FileOutputStream(canonicalOutFile);
+			fos = new FileOutputStream(out);
 			bos = new BufferedOutputStream(fos);
 
 			int num;
+
 			while ((num = jarIS.read(buf, 0, 2048)) != -1) {
 				bos.write(buf, 0, num);
 			}
